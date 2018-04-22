@@ -2,11 +2,15 @@
 
 > :warning: This is a work in progress
 
+The *Base Project* deploys a completely empty Exekube project onto the Google Cloud Platform. You can clone this project and add modules to customize it.
+
+## What we're building
+
+The goal of this minimal project is to see the [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) of our cluster:
+
 <p align="center">
   <img src="/screenshot.png" alt="The final result of the tutorial: nothing (a Kubernetes dashboard)."/>
 </p>
-
-exekube/base-project is an empty Exekube project (possible `xk new` in a future release)
 
 ## Table of Contents
 
