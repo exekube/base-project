@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  exekube:
+  xk:
     image: exekube/exekube:0.3.0-google
     working_dir: /project
     environment:
