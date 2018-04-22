@@ -45,14 +45,25 @@ docker-compose run --rm xk up live/dev/infra
 ```
 
 ---
-Below this line, we create **ephemeral** resources. You can create and destroy these resources *as often as you want*.
+⬇️ Below this line, we create **ephemeral** resources. You can create and destroy these resources *as often as you want* ⬇️
 
+---
 
 ### Step 4: Create a Kubernetes cluster and all Kubernetes resources
+
+4a. Create all resources:
 
 ```sh
 docker-compose run --rm xk up
 ```
+
+4b. Launch a `kubectl proxy` for your GKE cluster:
+
+```sh
+docker-compose up
+```
+
+4c. Go to your cluster dashboard: <http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/>
 
 ### Step 5: Destroy all Kubernetes resources and the cluster
 
