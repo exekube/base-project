@@ -4,6 +4,18 @@
 
 exekube/base-project is an empty Exekube project (possible `xk new` in a future release)
 
+## Modules
+
+| Module | Version | Notes |
+| --- | --- | --- |
+| gcp-secret-mgmt | 0.3.0-google (unreleased) | Create GCS buckets and Cloud KMS encryption keys for storing secrets for an environment of the project |
+| gke-network | 0.3.0-google (unreleased) | Create a network / subnets / static IP addresses / DNS zones and records |
+| gke-cluster | 0.3.0-google (unreleased) | Create a Google Kubernetes Engine cluster `v1.9.6-gke.1`  |
+| administration-tasks | 0.3.0-google (unreleased) | Install chart for managing common cluster administration tasks  |
+| helm-initializer | 0.3.0-google (unreleased) | Securely install Tiller into any namespace (using mutual TLS authentication)  |
+| cert-manager | 0.3.0-google (unreleased) | Manage TLS certificate issuers and certificates (including Let's Encrypt certs for ingress!) |
+
+
 ## Tutorial
 
 > Exekube works from within a Docker container operated by [Docker Compose](https://docs.docker.com/compose/compose-file/). The container can be configured via the [`docker-compose.yaml`](https://github.com/exekube/base-project/blob/master/docker-compose.yaml) file.
