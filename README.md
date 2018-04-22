@@ -2,9 +2,31 @@
 
 > :warning: This is a work in progress
 
+<p align="center">
+  <img src="/screenshot.png" alt="The final result of the tutorial: nothing (a Kubernetes dashboard)."/>
+</p>
+
 exekube/base-project is an empty Exekube project (possible `xk new` in a future release)
 
-## Modules
+## Table of Contents
+
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Exekube Base Project](#exekube-base-project)
+	- [Table of Contents](#table-of-contents)
+	- [Terraform Modules](#terraform-modules)
+	- [Tutorial](#tutorial)
+		- [Step 0: Prerequisites](#step-0-prerequisites)
+		- [Step 1: Set the Google Cloud Platform *project name base*](#step-1-set-the-google-cloud-platform-project-name-base)
+		- [Step 2: Initialize the project on Google Cloud Platform](#step-2-initialize-the-project-on-google-cloud-platform)
+		- [Step 3: Create networking resources for the `live/dev` environement](#step-3-create-networking-resources-for-the-livedev-environement)
+		- [Step 4: Create a Kubernetes cluster and all Kubernetes resources](#step-4-create-a-kubernetes-cluster-and-all-kubernetes-resources)
+		- [Step 5: Destroy all Kubernetes resources and the cluster](#step-5-destroy-all-kubernetes-resources-and-the-cluster)
+		- [Customizing the project](#customizing-the-project)
+
+<!-- /TOC -->
+
+## Terraform Modules
 
 | Module | Version | Notes |
 | --- | --- | --- |
@@ -28,9 +50,6 @@ exekube/base-project is an empty Exekube project (possible `xk new` in a future 
 ### Step 1: Set the Google Cloud Platform *project name base*
 
 ```yaml
-# TF_VAR_project_id is used to create a GCP project for our environment
-#   via the gcp-project-init script
-# It's then used by modules as a space to create resources in
 TF_VAR_project_id: ${ENV:?err}-demo-apps-296e23
 ```
 
