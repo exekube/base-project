@@ -41,7 +41,6 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 | helm-initializer | 0.3.0-google (unreleased) | Securely install Tiller into any namespace (using mutual TLS authentication)  |
 | cert-manager | 0.3.0-google (unreleased) | Manage TLS certificate issuers and certificates (including Let's Encrypt certs for ingress!) |
 
-
 ## Tutorial
 
 > Exekube works from within a Docker container operated by [Docker Compose](https://docs.docker.com/compose/compose-file/). The container can be configured via the [`docker-compose.yaml`](https://github.com/exekube/base-project/blob/master/docker-compose.yaml) file.
@@ -57,11 +56,15 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 TF_VAR_project_id: ${ENV:?err}-demo-apps-296e23
 ```
 
-### Step 2: Initialize the project on Google Cloud Platform
+### Step 2: Initialize the live/dev environment on Google Cloud Platform
+
+2a. Login into your account on the Google Cloud Platform:
 
 ```sh
 docker-compose run --rm xk gcloud auth login
 ```
+
+2b. Set variables for your live/dev environment:
 
 ```sh
 export ORGANIZATION_ID=<your-gcp-organization-id>
@@ -69,11 +72,13 @@ export BILLING_ID=<your-gcp-billing-id>
 export ENV=dev
 ```
 
+2c. Initialize the live/dev environment:
+
 ```sh
 docker-compose run --rm xk gcp-project-init
 ```
 
-### Step 3: Create networking resources for the `live/dev` environement
+### Step 3: Create networking resources for the live/dev environement
 
 ```sh
 docker-compose run --rm xk up live/dev/infra
