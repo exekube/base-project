@@ -1,2 +1,7 @@
 .config/
 .hide/
+live/*/**/owner.json
+
+# NEVER COMMIT TO VERSION CONTROL BEFORE DOING THIS!!!
+# UNCOMMENT LINE BELLOW IMMEDIATELY TO ACTIVATE ENVIRONMENT!
+# live/*/*secrets/**
