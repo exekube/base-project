@@ -1,0 +1,5 @@
+.config/
+.hide/
+live/**/secrets/**
+!live/**/secrets/*.example
+!live/**/.keep
