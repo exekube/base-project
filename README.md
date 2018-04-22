@@ -6,23 +6,33 @@ exekube/base-project is an empty Exekube project (possible `xk new` in a future 
 
 ## Tutorial
 
-Exekube works from within a Docker container operated via [Docker Compose](https://docs.docker.com/compose/compose-file/). All *project-scoped* configuration is inside the [`docker-compose.yaml`](https://github.com/exekube/base-project/blob/master/docker-compose.yaml) file.
+> Exekube works from within a Docker container operated by [Docker Compose](https://docs.docker.com/compose/compose-file/). The container can be configured via the [`docker-compose.yaml`](https://github.com/exekube/base-project/blob/master/docker-compose.yaml) file.
 
 ### Step 0: Prerequisites
 
 - You'll need a Google Account with access to an [Organization resource](https://cloud.google.com/resource-manager/docs/quickstart-organizations)
 - On your workstation, you'll need to have [Docker Community Edition](https://www.docker.com/community-edition) installed
 
-### Step 1: Set the project name on Google Cloud Platform
+### Step 1: Set the Google Cloud Platform *project name base*
 
 ```yaml
 # TF_VAR_project_id is used to create a GCP project for our environment
-#   via the project-init script
+#   via the gcp-project-init script
 # It's then used by modules as a space to create resources in
 TF_VAR_project_id: ${ENV:?err}-demo-apps-296e23
 ```
 
 ### Step 2: Initialize the project on Google Cloud Platform
+
+```sh
+docker-compose run --rm xk gcloud auth login
+```
+
+```sh
+export ORGANIZATION_ID=<your-gcp-organization-id>
+export BILLING_ID=<your-gcp-billing-id>
+export ENV=dev
+```
 
 ```sh
 docker-compose run --rm xk gcp-project-init

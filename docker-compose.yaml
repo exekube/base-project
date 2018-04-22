@@ -13,7 +13,7 @@ services:
       ORGANIZATION_ID:
       BILLING_ID:
       # TF_VAR_project_id is used to create a GCP project for our environment
-      #   via the project-init script
+      #   via the gcp-project-init script
       # It's then used by modules as a space to create resources in
       TF_VAR_project_id: ${ENV:?err}-demo-apps-296e23
 
