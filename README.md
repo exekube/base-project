@@ -1,8 +1,13 @@
-# Exekube Base Project
+# base-project
 
 > :warning: This is a work in progress
 
-The *Base Project* deploys a completely empty Exekube project onto the Google Cloud Platform. You can clone this project and add modules to customize it.
+The *base-project* deploys an empty Exekube project onto the Google Cloud Platform. You can clone the GitHub repo, then [customize it by adding new modules](/):
+
+```sh
+$ git clone git@github.com:exekube/base-project.git my-new-project
+$ cd my-new-project
+```
 
 ## What we're building
 
