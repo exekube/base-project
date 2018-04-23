@@ -59,6 +59,7 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 ### Step 1: Set the Google Cloud Platform *project name base*
 
 ```yaml
+# docker-compose.yaml
 TF_VAR_project_id: ${ENV}-demo-apps-296e23
 ```
 
@@ -67,15 +68,15 @@ TF_VAR_project_id: ${ENV}-demo-apps-296e23
 2a. Set variables for your live/dev environment:
 
 ```sh
-export ORGANIZATION_ID=<your-gcp-organization-id>
-export BILLING_ID=<your-gcp-billing-id>
-export ENV=dev
+$ export ORGANIZATION_ID=<your-gcp-organization-id>
+$ export BILLING_ID=<your-gcp-billing-id>
+$ export ENV=dev
 ```
 
 2b. Login into your account on the Google Cloud Platform:
 
 ```sh
-docker-compose run --rm xk gcloud auth login
+$ docker-compose run --rm xk gcloud auth login
 ```
 
 > All config settings be set to `.config/dev/gcloud`. This is configured via the `docker-compose.yaml` file.
@@ -83,13 +84,13 @@ docker-compose run --rm xk gcloud auth login
 2c. Initialize the live/dev environment:
 
 ```sh
-docker-compose run --rm xk gcp-project-init
+$ docker-compose run --rm xk gcp-project-init
 ```
 
 ### Step 3: Create networking resources for the live/dev environement
 
 ```sh
-docker-compose run --rm xk up live/dev/infra
+$ docker-compose run --rm xk up live/dev/infra
 ```
 
 ---
@@ -102,13 +103,13 @@ docker-compose run --rm xk up live/dev/infra
 4a. Create all resources:
 
 ```sh
-docker-compose run --rm xk up
+$ docker-compose run --rm xk up
 ```
 
 4b. Launch a `kubectl proxy` for your GKE cluster:
 
 ```sh
-docker-compose up
+$ docker-compose up
 ```
 
 4c. Go to your cluster dashboard: <http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/>
@@ -116,7 +117,7 @@ docker-compose up
 ### Step 5: Destroy all Kubernetes resources and the cluster
 
 ```sh
-docker-compose run --rm xk down
+$ docker-compose run --rm xk down
 ```
 
 ### Customizing the project
