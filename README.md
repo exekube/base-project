@@ -21,14 +21,15 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Exekube Base Project](#exekube-base-project)
+- [base-project](#base-project)
+	- [What we're building](#what-were-building)
 	- [Table of Contents](#table-of-contents)
 	- [Terraform Modules](#terraform-modules)
 	- [Tutorial](#tutorial)
 		- [Step 0: Prerequisites](#step-0-prerequisites)
 		- [Step 1: Set the Google Cloud Platform *project name base*](#step-1-set-the-google-cloud-platform-project-name-base)
-		- [Step 2: Initialize the project on Google Cloud Platform](#step-2-initialize-the-project-on-google-cloud-platform)
-		- [Step 3: Create networking resources for the `live/dev` environement](#step-3-create-networking-resources-for-the-livedev-environement)
+		- [Step 2: Initialize the live/dev environment on Google Cloud Platform:](#step-2-initialize-the-livedev-environment-on-google-cloud-platform)
+		- [Step 3: Create networking resources for the live/dev environement](#step-3-create-networking-resources-for-the-livedev-environement)
 		- [Step 4: Create a Kubernetes cluster and all Kubernetes resources](#step-4-create-a-kubernetes-cluster-and-all-kubernetes-resources)
 		- [Step 5: Destroy all Kubernetes resources and the cluster](#step-5-destroy-all-kubernetes-resources-and-the-cluster)
 		- [Customizing the project](#customizing-the-project)
@@ -58,24 +59,26 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 ### Step 1: Set the Google Cloud Platform *project name base*
 
 ```yaml
-TF_VAR_project_id: ${ENV:?err}-demo-apps-296e23
+TF_VAR_project_id: ${ENV}-demo-apps-296e23
 ```
 
-### Step 2: Initialize the live/dev environment on Google Cloud Platform
+### Step 2: Initialize the live/dev environment on Google Cloud Platform:
 
-2a. Login into your account on the Google Cloud Platform:
-
-```sh
-docker-compose run --rm xk gcloud auth login
-```
-
-2b. Set variables for your live/dev environment:
+2a. Set variables for your live/dev environment:
 
 ```sh
 export ORGANIZATION_ID=<your-gcp-organization-id>
 export BILLING_ID=<your-gcp-billing-id>
 export ENV=dev
 ```
+
+2b. Login into your account on the Google Cloud Platform:
+
+```sh
+docker-compose run --rm xk gcloud auth login
+```
+
+> All config settings be set to `.config/dev/gcloud`. This is configured via the `docker-compose.yaml` file.
 
 2c. Initialize the live/dev environment:
 
