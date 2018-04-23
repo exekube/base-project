@@ -6,7 +6,7 @@ services:
     working_dir: /project
     environment:
       USER: root
-      ENV:
+      ENV: ${ENV:?err}
       TF_INPUT: "0"
       TF_LOG:
 
@@ -15,19 +15,19 @@ services:
       # TF_VAR_project_id is used to create a GCP project for our environment
       #   via the gcp-project-init script
       # It's then used by modules as a space to create resources in
-      TF_VAR_project_id: ${ENV:?err}-demo-apps-296e23
+      TF_VAR_project_id: ${ENV}-demo-apps-296e23
 
       # TF_VAR_serviceaccount_key will be used by the project-init script
       #    to put the service account key upon the creation of the GCP project
       # It will then be used by modules to authenticate to GCP
-      TF_VAR_serviceaccount_key: /project/live/${ENV:?err}/secrets/kube-system/owner.json
+      TF_VAR_serviceaccount_key: /project/live/${ENV}/secrets/kube-system/owner.json
 
       # TF_VAR is the default directory for Terraform / Terragrunt
       # Used when we run `xk up` or `xk down` without an argument
-      TF_VAR_default_dir: /project/live/${ENV:?err}/k8s
+      TF_VAR_default_dir: /project/live/${ENV}/k8s
 
       # TF_VAR_secrets_dir is used by multiple modules to source secrets from
-      TF_VAR_secrets_dir: /project/live/${ENV:?err}/secrets
+      TF_VAR_secrets_dir: /project/live/${ENV}/secrets
 
       # Keyring is used by the gcp-secret-mgmt module
       # Also by secrets-fetch and secrets-push scripts
@@ -38,10 +38,10 @@ services:
       - 8001:8001
     volumes:
       - .:/project
-      - ./.config/${ENV:?err}/helm:/root/.helm
-      - ./.config/${ENV:?err}/terragrunt:/root/.terragrunt
-      - ./.config/${ENV:?err}/gcloud:/root/.config/gcloud
-      - ./.config/${ENV:?err}/kube:/root/.kube
+      - ./.config/${ENV}/helm:/root/.helm
+      - ./.config/${ENV}/terragrunt:/root/.terragrunt
+      - ./.config/${ENV}/gcloud:/root/.config/gcloud
+      - ./.config/${ENV}/kube:/root/.kube
 
       # EXEKUBE DEVELOPMENT
       - ../exekube/modules:/exekube-modules
