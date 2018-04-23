@@ -17,12 +17,7 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
   <img src="/screenshot.png" alt="The final result of the tutorial: nothing (a Kubernetes dashboard)."/>
 </p>
 
-To spice things up, we'll show you how to deploy an *nginx* server onto the cluster by creating a Terraform module and a Helm chart:
-
-<p align="center">
-  <img src="/screenshot.png" alt="The final result of the tutorial: nothing (a Kubernetes dashboard)."/>
-</p>
-
+Closer to the end of this tutorial, we'll also author a new module for the project: an nginx app called *myapp*.
 
 ## Table of Contents
 
@@ -123,11 +118,9 @@ $ docker-compose up
 
 ### Step 5: (Optional) Deploy an nginx app
 
-So, this project does absolutely nothing useful! You will need to customize the project before you know how everything works.
+Let's add a basic Terraform module and a Helm chart to deploy *myapp*, an nginx app, into our Kubernetes cluster:
 
-Let's add a basic Terraform module and a Helm chart to deploy **myapp**, an nginx app, onto the cluster:
-
-1. Create a project-scoped Terraform module:
+1. Create `modules/myapp` and the Helm chart for it:
     ```sh
     # Create a directory for the module and its `main.tf`
     $ mkdir modules/myapp
@@ -166,7 +159,7 @@ Let's add a basic Terraform module and a Helm chart to deploy **myapp**, an ngin
 
 4. Go to <http://localhost:8001/api/v1/namespaces/default/services/myapp-nginx-app:80/proxy/>
 
-### Step 5: Destroy all Kubernetes resources and the cluster
+### Step 6: Destroy all Kubernetes resources and the cluster
 
 ```sh
 $ docker-compose run --rm xk down
