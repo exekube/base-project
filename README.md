@@ -2,7 +2,7 @@
 
 > :warning: This is a work in progress
 
-The *base-project* deploys an empty Exekube project onto the Google Cloud Platform. You can clone the GitHub repo, then [customize it by adding new modules](/):
+The *base-project* deploys an empty Exekube project onto the Google Cloud Platform.
 
 ```sh
 $ git clone git@github.com:exekube/base-project.git my-new-project
@@ -16,6 +16,13 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 <p align="center">
   <img src="/screenshot.png" alt="The final result of the tutorial: nothing (a Kubernetes dashboard)."/>
 </p>
+
+To spice things up, we'll show you how to deploy an *nginx* server onto the cluster by creating a Terraform module and a Helm chart:
+
+<p align="center">
+  <img src="/screenshot.png" alt="The final result of the tutorial: nothing (a Kubernetes dashboard)."/>
+</p>
+
 
 ## Table of Contents
 
@@ -114,12 +121,53 @@ $ docker-compose up
 
 4c. Go to your cluster dashboard: <http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/>
 
+### Step 5: (Optional) Deploy an nginx app
+
+So, this project does absolutely nothing useful! You will need to customize the project before you know how everything works.
+
+Let's add a basic Terraform module and a Helm chart to deploy **myapp**, an nginx app, onto the cluster:
+
+1. Create a project-scoped Terraform module:
+    ```sh
+    # Create a directory for the module and its `main.tf`
+    $ mkdir modules/myapp
+    $ touch modules/myapp/main.tf
+    # Create an empty Helm chart and move it to modules/myapp/
+    $ xk helm create nginx-app
+    $ mv nginx-app modules/myapp
+    # Create values.yaml (values for myapp Helm release)
+    $ cp modules/myapp/nginx-app/values.yaml modules/myapp/values.yaml
+    ```
+2. Configure the module in `modules/myapp/main.tf`:
+
+    ```tf
+    terraform {
+      backend "gcs" {}
+    }
+
+    variable "secrets_dir" {}
+
+    module "myapp" {
+      source           = "/exekube-modules/helm-release"
+      tiller_namespace = "kube-system"
+      client_auth      = "${var.secrets_dir}/kube-system/helm-tls"
+
+      chart_name = "nginx-app/"
+
+      release_name      = "myapp"
+      release_namespace = "default"
+    }
+    ```
+
+3. Update your cluster:
+    ```sh
+    $ xk up
+    ```
+
+4. Go to <http://localhost:8001/api/v1/namespaces/default/services/myapp-nginx-app:80/proxy/>
+
 ### Step 5: Destroy all Kubernetes resources and the cluster
 
 ```sh
 $ docker-compose run --rm xk down
 ```
-
-### Customizing the project
-
-This project does absolutely nothing useful! You need to customize the project so that you can start taking advantage of cloud resources via Kubernetes and Terraform!

@@ -11,7 +11,11 @@ module "gke_cluster" {
   serviceaccount_key = "${var.serviceaccount_key}"
 
   initial_node_count = 1
-  main_compute_zone  = "europe-west1-d"
+  node_type          = "f1-micro"
+  kubernetes_version = "1.9.6-gke.1"
+
+  main_compute_zone = "europe-west1-d"
+  additional_zones  = []
 
   oauth_scopes = [
     "https://www.googleapis.com/auth/compute",
@@ -19,8 +23,4 @@ module "gke_cluster" {
     "https://www.googleapis.com/auth/logging.write",
     "https://www.googleapis.com/auth/monitoring",
   ]
-
-  additional_zones   = []
-  node_type          = "n1-standard-2"
-  kubernetes_version = "1.9.6-gke.1"
 }
