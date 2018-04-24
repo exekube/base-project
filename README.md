@@ -1,8 +1,12 @@
 # base-project
 
-> :warning: This is a work in progress
+> :warning:
+>
+> This is a work in progress
+>
+> :warning:
 
-The *base-project* deploys an empty Exekube project onto the Google Cloud Platform.
+The *base-project* is a minimal project that uses the [Exekube framework](https://github.com/exekube/exekube).
 
 ```sh
 $ git clone git@github.com:exekube/base-project.git my-new-project
@@ -11,13 +15,11 @@ $ cd my-new-project
 
 ## What we're building
 
-The goal of this minimal project is to see the [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) of our cluster:
+The goal of this minimal project is to see the [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) of our cluster. Closer to the end of this tutorial, we'll also author a new Terraform module for the project: an nginx app called *myapp*.
 
 <p align="center">
   <img src="/screenshot.png" alt="The final result of the tutorial: nothing (a Kubernetes dashboard)."/>
 </p>
-
-Closer to the end of this tutorial, we'll also author a new module for the project: an nginx app called *myapp*.
 
 ## Table of Contents
 
@@ -42,12 +44,12 @@ Closer to the end of this tutorial, we'll also author a new module for the proje
 
 | Module | Version | Notes |
 | --- | --- | --- |
-| gcp-secret-mgmt | 0.3.0-google (unreleased) | Create GCS buckets and Cloud KMS encryption keys for storing secrets for an environment of the project |
-| gke-network | 0.3.0-google (unreleased) | Create a network / subnets / static IP addresses / DNS zones and records |
-| gke-cluster | 0.3.0-google (unreleased) | Create a Google Kubernetes Engine cluster `v1.9.6-gke.1`  |
-| administration-tasks | 0.3.0-google (unreleased) | Install chart for managing common cluster administration tasks  |
-| helm-initializer | 0.3.0-google (unreleased) | Securely install Tiller into any namespace (using mutual TLS authentication)  |
-| cert-manager | 0.3.0-google (unreleased) | Manage TLS certificate issuers and certificates (including Let's Encrypt certs for ingress!) |
+| gcp-secret-mgmt | 0.3.0-google | Create GCS buckets and Cloud KMS encryption keys for storing secrets for an environment of the project |
+| gke-network | 0.3.0-google | Create a network / subnets / static IP addresses / DNS zones and records |
+| gke-cluster | 0.3.0-google | Create a Google Kubernetes Engine cluster `v1.9.6-gke.1`  |
+| administration-tasks | 0.3.0-google | Install chart for managing common cluster administration tasks  |
+| helm-initializer | 0.3.0-google | Securely install Tiller into any namespace (using mutual TLS authentication)  |
+| cert-manager | 0.3.0-google | Manage TLS certificate issuers and certificates (including Let's Encrypt certs for ingress!) |
 
 ## Tutorial
 
@@ -95,11 +97,6 @@ $ docker-compose run --rm xk gcp-project-init
 $ docker-compose run --rm xk up live/dev/infra
 ```
 
----
-⬇️ Below this line, we create **ephemeral** resources. You can create and destroy these resources *as often as you want* ⬇️
-
----
-
 ### Step 4: Create a Kubernetes cluster and all Kubernetes resources
 
 4a. Create all resources:
@@ -116,24 +113,17 @@ $ docker-compose up
 
 4c. Go to your cluster dashboard: <http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/>
 
-### Step 5: (Optional) Deploy an nginx app
+### (Optional) Step 5: Deploy an nginx app
 
 Let's add a basic Terraform module and a Helm chart to deploy *myapp*, an nginx app, into our Kubernetes cluster:
 
-1. Create `modules/myapp` and the Helm chart for it:
+1. First, let's create the project module:
     ```sh
-    # Create a directory for the module and its `main.tf`
     $ mkdir modules/myapp
     $ touch modules/myapp/main.tf
-    # Create an empty Helm chart and move it to modules/myapp/
-    $ xk helm create nginx-app
-    $ mv nginx-app modules/myapp
-    # Create values.yaml (values for myapp Helm release)
-    $ cp modules/myapp/nginx-app/values.yaml modules/myapp/values.yaml
     ```
-2. Configure the module in `modules/myapp/main.tf`:
-
     ```tf
+    # modules/myapp/main.tf
     terraform {
       backend "gcs" {}
     }
@@ -145,16 +135,29 @@ Let's add a basic Terraform module and a Helm chart to deploy *myapp*, an nginx 
       tiller_namespace = "kube-system"
       client_auth      = "${var.secrets_dir}/kube-system/helm-tls"
 
-      chart_name = "nginx-app/"
-
       release_name      = "myapp"
       release_namespace = "default"
+
+      chart_name = "nginx-app/"
     }
+    ```
+
+2. Next, we will create a local Helm chart and release values for it:
+
+    ```sh
+    # Create a brand-new Helm chart
+    $ docker-compose run --rm xk helm create nginx-app
+
+    # Move the chart into modules/myapp
+    $ mv nginx-app modules/myapp
+
+    # Create release.yaml for myapp Release
+    $ cp modules/myapp/nginx-app/values.yaml modules/myapp/values.yaml
     ```
 
 3. Update your cluster:
     ```sh
-    $ xk up
+    $ docker-compose run --rm xk up
     ```
 
 4. Go to <http://localhost:8001/api/v1/namespaces/default/services/myapp-nginx-app:80/proxy/>
