@@ -31,12 +31,12 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 	- [Terraform Modules](#terraform-modules)
 	- [Tutorial](#tutorial)
 		- [Step 0: Prerequisites](#step-0-prerequisites)
-		- [Step 1: Set the Google Cloud Platform *project name base*](#step-1-set-the-google-cloud-platform-project-name-base)
+		- [Step 1: Set the Google Cloud Platform project name base](#step-1-set-the-google-cloud-platform-project-name-base)
 		- [Step 2: Initialize the live/dev environment on Google Cloud Platform:](#step-2-initialize-the-livedev-environment-on-google-cloud-platform)
 		- [Step 3: Create networking resources for the live/dev environement](#step-3-create-networking-resources-for-the-livedev-environement)
 		- [Step 4: Create a Kubernetes cluster and all Kubernetes resources](#step-4-create-a-kubernetes-cluster-and-all-kubernetes-resources)
-		- [Step 5: Destroy all Kubernetes resources and the cluster](#step-5-destroy-all-kubernetes-resources-and-the-cluster)
-		- [Customizing the project](#customizing-the-project)
+		- [Step 5: (Optional) Deploy an nginx app](#step-5-optional-deploy-an-nginx-app)
+		- [Step 6: Destroy all Kubernetes resources and the cluster](#step-6-destroy-all-kubernetes-resources-and-the-cluster)
 
 <!-- /TOC -->
 
@@ -60,10 +60,11 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 - You'll need a Google Account with access to an [Organization resource](https://cloud.google.com/resource-manager/docs/quickstart-organizations)
 - On your workstation, you'll need to have [Docker Community Edition](https://www.docker.com/community-edition) installed
 
-### Step 1: Set the Google Cloud Platform *project name base*
+### Step 1: Set the Google Cloud Platform project name base
+
+We'll create a unique GCP project for every *environment* (dev, stg, prod). Set the *project name base* in `docker-compose.yaml`:
 
 ```yaml
-# docker-compose.yaml
 TF_VAR_project_id: ${ENV}-demo-apps-296e23
 ```
 
@@ -113,7 +114,7 @@ docker-compose up -d
 
 4c. Go to your cluster dashboard: <http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/>
 
-### (Optional) Step 5: Deploy an nginx app
+### Step 5: (Optional) Deploy an nginx app
 
 Let's add a basic Terraform module and a Helm chart to deploy *myapp*, an nginx app, into our Kubernetes cluster:
 
@@ -149,18 +150,44 @@ Let's add a basic Terraform module and a Helm chart to deploy *myapp*, an nginx 
     docker-compose run --rm xk helm create nginx-app
 
     # Move the chart into modules/myapp
-    mv nginx-app modules/myapp
+    mv nginx-app modules/myapp/
 
     # Create values.yaml for myapp Helm release
-    cp modules/myapp/nginx-app/values.yaml modules/myapp/values.yaml
+    cp modules/myapp/nginx-app/values.yaml modules/myapp/
     ```
 
-3. Update your cluster:
+3. Add the module into live/dev environment:
+    ```sh
+    mkdir -p live/dev/k8s/default/myapp
+    touch live/dev/k8s/default/myapp/terraform.tvars
+    ```
+    ```tf
+    # ↓ Module metadata
+    terragrunt = {
+      terraform {
+        source = "/project/modules//myapp"
+      }
+
+      dependencies {
+        paths = [
+          "../../kube-system/helm-initializer",
+        ]
+      }
+
+      include = {
+        path = "${find_in_parent_folders()}"
+      }
+    }
+
+    # ↓ Module configuration (empty means all default)
+    ```
+
+4. Update your cluster:
     ```sh
     docker-compose run --rm xk up
     ```
 
-4. Go to <http://localhost:8001/api/v1/namespaces/default/services/myapp-nginx-app:80/proxy/>
+5. Go to <http://localhost:8001/api/v1/namespaces/default/services/myapp-nginx-app:80/proxy/>
 
 ### Step 6: Destroy all Kubernetes resources and the cluster
 
