@@ -7,19 +7,20 @@ services:
     environment:
       USER: root
       ENV: ${ENV:?err}
+      ORGANIZATION_ID:
+      BILLING_ID:
+
       TF_INPUT: "0"
       TF_LOG:
 
-      ORGANIZATION_ID:
-      BILLING_ID:
       # TF_VAR_project_id is used to create a GCP project for our environment
       #   via the gcp-project-init script
       # It's then used by modules as a space to create resources in
       TF_VAR_project_id: ${ENV}-demo-apps-296e23
 
-      # TF_VAR_serviceaccount_key will be used by the project-init script
+      # TF_VAR_serviceaccount_key will be used by the gcp-project-init script
       #    to put the service account key upon the creation of the GCP project
-      # It will then be used by modules to authenticate to GCP
+      # It can then be used by modules to authenticate to GCP
       TF_VAR_serviceaccount_key: /project/live/${ENV}/secrets/kube-system/owner.json
 
       # TF_VAR is the default directory for Terraform / Terragrunt

@@ -83,7 +83,7 @@ $ export ENV=dev
 $ docker-compose run --rm xk gcloud auth login
 ```
 
-> All config settings be set to `.config/dev/gcloud`. This is configured via the `docker-compose.yaml` file.
+> All gcloud config be saved to `.config/dev/gcloud`. This is configured via the `docker-compose.yaml` file.
 
 2c. Initialize the live/dev environment:
 
@@ -105,10 +105,10 @@ $ docker-compose run --rm xk up live/dev/infra
 $ docker-compose run --rm xk up
 ```
 
-4b. Launch a `kubectl proxy` for your GKE cluster:
+4b. Launch a `kubectl proxy` for the cluster:
 
 ```sh
-$ docker-compose up
+$ docker-compose up -d
 ```
 
 4c. Go to your cluster dashboard: <http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/>
@@ -151,7 +151,7 @@ Let's add a basic Terraform module and a Helm chart to deploy *myapp*, an nginx 
     # Move the chart into modules/myapp
     $ mv nginx-app modules/myapp
 
-    # Create release.yaml for myapp Release
+    # Create values.yaml for myapp Helm release
     $ cp modules/myapp/nginx-app/values.yaml modules/myapp/values.yaml
     ```
 
