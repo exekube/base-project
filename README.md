@@ -1,12 +1,6 @@
 # base-project
 
-> :warning:
->
-> This is a work in progress
->
-> :warning:
-
-The *base-project* is a minimal project that uses the [Exekube framework](https://github.com/exekube/exekube).
+The **base-project** is a minimal project that uses the [Exekube framework](https://github.com/exekube/exekube).
 
 ```sh
 git clone git@github.com:exekube/base-project.git my-new-project
@@ -73,15 +67,21 @@ TF_VAR_project_id: ${ENV}-demo-apps-296e23
 2a. Set variables for the project's live/dev environment (in your shell):
 
 ```sh
-export ORGANIZATION_ID=<your-gcp-organization-id>
-export BILLING_ID=<your-gcp-billing-id>
-export ENV=dev
+export ENV=dev # Pick an environment (dev, stg, prod, test, etc.)
+export ORGANIZATION_ID=<your-gcp-organization-id> # GCP organization ID
+export BILLING_ID=<your-gcp-billing-id> # GCP Billing ID
+```
+
+Notice that we run everything from a Docker container using `docker-compose`. For typing convenience, add this alias into your shell (or `~/.bashrc`):
+
+```sh
+alias xk='docker-compose run --rm xk'
 ```
 
 2b. Login into your account on the Google Cloud Platform:
 
 ```sh
-docker-compose run --rm xk gcloud auth login
+xk gcloud auth login
 ```
 
 > All gcloud config be saved to `.config/dev/gcloud`. This is configured via the `docker-compose.yaml` file.
@@ -89,13 +89,13 @@ docker-compose run --rm xk gcloud auth login
 2c. Initialize the live/dev environment:
 
 ```sh
-docker-compose run --rm xk gcp-project-init
+xk gcp-project-init
 ```
 
 ### Step 3: Create networking resources for the live/dev environement
 
 ```sh
-docker-compose run --rm xk up live/dev/infra
+xk up live/dev/infra
 ```
 
 ### Step 4: Create a Kubernetes cluster and all Kubernetes resources
@@ -103,7 +103,7 @@ docker-compose run --rm xk up live/dev/infra
 4a. Create all resources:
 
 ```sh
-docker-compose run --rm xk up
+xk up
 ```
 
 4b. Launch a `kubectl proxy` for the cluster:
@@ -147,7 +147,7 @@ Let's add a basic Terraform module and a Helm chart to deploy *myapp*, an nginx 
 
     ```sh
     # Create a brand-new Helm chart
-    docker-compose run --rm xk helm create nginx-app
+    xk helm create nginx-app
 
     # Move the chart into modules/myapp
     mv nginx-app modules/myapp/
@@ -184,7 +184,7 @@ Let's add a basic Terraform module and a Helm chart to deploy *myapp*, an nginx 
 
 4. Update your cluster:
     ```sh
-    docker-compose run --rm xk up
+    xk up
     ```
 
 5. Go to <http://localhost:8001/api/v1/namespaces/default/services/myapp-nginx-app:80/proxy/>
@@ -192,5 +192,5 @@ Let's add a basic Terraform module and a Helm chart to deploy *myapp*, an nginx 
 ### Step 6: Destroy all Kubernetes resources and the cluster
 
 ```sh
-docker-compose run --rm xk down
+xk down
 ```

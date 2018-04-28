@@ -1,6 +1,6 @@
-terraform {
-  backend "gcs" {}
-}
+# ------------------------------------------------------------------------------
+# INPUT VARIABLES
+# ------------------------------------------------------------------------------
 
 variable "project_id" {}
 variable "serviceaccount_key" {}
@@ -13,15 +13,36 @@ variable "dns_records" {
   default = {}
 }
 
+# ------------------------------------------------------------------------------
+# TERRAFORM AND PROVIDER CONFIG
+# ------------------------------------------------------------------------------
+
+terraform {
+  backend "gcs" {}
+}
+
+provider "google" {
+  project     = "${var.project_id}"
+  credentials = "${var.serviceaccount_key}"
+}
+
+# ------------------------------------------------------------------------------
+# RESOURCES AND EXTERNAL MODULE IMPORTS
+# ------------------------------------------------------------------------------
+
 module "gke_network" {
   source = "/exekube-modules/gke-network"
 
-  project_id         = "${var.project_id}"
-  serviceaccount_key = "${var.serviceaccount_key}"
+  create_static_ip_address = false
 
   #  dns_zones   = "${var.dns_zones}"
   #  dns_records = "${var.dns_records}"
 }
+
+# ------------------------------------------------------------------------------
+# OUTPUTS
+# ------------------------------------------------------------------------------
+
 
 /*
 output "static_ip_address" {
