@@ -58,8 +58,15 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 
 We'll create a unique GCP project for every *environment* (dev, stg, prod). Set the *project name base* in `docker-compose.yaml`:
 
-```yaml
-TF_VAR_project_id: ${ENV}-demo-apps-296e23
+```diff
+services:
+  xk:
+    image: exekube/exekube:0.3.0-google
+    working_dir: /project
+    environment:
+      # ...
+-     TF_VAR_project_id: ${ENV}-demo-apps-296e23
++     TF_VAR_project_id: ${ENV}-my-project-09345g
 ```
 
 ### Step 2: Initialize the live/dev environment on Google Cloud Platform:
