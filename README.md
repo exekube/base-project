@@ -53,10 +53,14 @@ The goal of this minimal project is to see the [Kubernetes Dashboard](https://gi
 
 - You'll need a Google Account with access to an [Organization resource](https://cloud.google.com/resource-manager/docs/quickstart-organizations)
 - On your workstation, you'll need to have [Docker Community Edition](https://www.docker.com/community-edition) installed
+- This repository cloned:
+    ```sh
+    git clone git@github.com:exekube/base-project.git my-new-project && cd my-new-project
+    ```
 
 ### Step 1: Set the Google Cloud Platform project name base
 
-We'll create a unique GCP project for every *environment* (dev, stg, prod). Set the *project name base* in `docker-compose.yaml`:
+We'll have the ability to create a unique GCP project for every *environment* (dev, stg, prod) of our Exekube project. Set the *project name base* in `docker-compose.yaml`:
 
 ```diff
 services:
@@ -70,6 +74,8 @@ services:
 ```
 
 ### Step 2: Initialize the live/dev environment on Google Cloud Platform:
+
+> You will need a Google Cloud Platform Organization ID and Billing ID for the next step of this tutorial. Use this [Google Cloud guide](https://cloud.google.com/resource-manager/docs/creating-managing-organization) to create a your Organization ID. To get a Billing ID, you can create a GCP Free Trial account under the organization and get $300 free to use on the platform.
 
 2a. Set variables for the project's live/dev environment (in your shell):
 
@@ -85,15 +91,47 @@ Notice that we run everything from a Docker container using `docker-compose`. Fo
 alias xk='docker-compose run --rm xk'
 ```
 
+2b. Check that Exekube CLI responds from our Docker container:
+
+```sh
+xk help
+```
+
+```
+NAME:
+Exekube - Manage the whole lifecycle of Kubernetes-based projects as declarative code
+USAGE:
+xk [global options] command [path]
+
+AUTHOR:
+Ilya Sotkov <ilya@sotkov.com>
+
+COMMANDS:
+   up, apply      Apply all modules in a path
+   down, destroy  Destroy all modules in a path (forces count of all resources to zero)
+   plan           Plan all modules in a path
+   output         Show output variables for all modules in a path
+   help, h        Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+--help, -h     show help
+--version, -v  print the version
+
+VERSION:
+0.3.0
+```
+
 2b. Login into your account on the Google Cloud Platform:
 
 ```sh
 xk gcloud auth login
 ```
 
-> All gcloud config be saved to `.config/dev/gcloud`. This is configured via the `docker-compose.yaml` file.
+Follow the instructions to log into `gcloud`. All gcloud config be saved locally to `.config/dev/gcloud`. This is configured via the `docker-compose.yaml` file.
 
 2c. Initialize the live/dev environment:
+
+> :warning: Exekube does not manage GCP projects or folders through Terraform. In order to keep every environment of every project self-contained, we use a bash script `gcp-project-init` that will create a GCP project, a bucket for Terraform remote state, and a service account with a private key saved into [`${TF_VAR_serviceaccount_key}`](https://github.com/exekube/base-project/blob/master/docker-compose.yaml#L24).
 
 ```sh
 xk gcp-project-init
