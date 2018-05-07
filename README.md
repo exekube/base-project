@@ -18,7 +18,7 @@ The project has a companion tutorial at https://docs.exekube.com/in-practice/get
 4. `export ENV=dev`
 5. `export ORGANIZATION_ID=<YOUR-GCP-ORGANIZATION-ID>`
 6. `export BILLING_ID=<YOUR-GCP-BILLING-ID>`
-7. In [`docker-compose.yaml`](/): `TF_VAR_project_id: <NEW-GCP-PROJECT-ID>`
+7. In [`docker-compose.yaml`](docker-compose.yaml): `TF_VAR_project_id: <NEW-GCP-PROJECT-ID>`
 8. `xk gcloud auth login`
 9. `xk gcp-project-init`
 10. `xk up live/dev/infra`
@@ -26,6 +26,8 @@ The project has a companion tutorial at https://docs.exekube.com/in-practice/get
 12. `xk down`
 
 ## Architecture
+
+> Note: Complex, production-grade cloud projects can have tens of project modules deployed into 5+ (dev, stg, prod, test, etc.) environments
 
 The base-project has only 4 *project modules*:
 
@@ -69,5 +71,3 @@ live/
 │           └── owner.json.example
 └── terraform.tfvars
 ```
-
-> Note: Complex, production-grade cloud projects can have tens of project modules deployed into 5+ (dev, stg, prod, test, etc.) environments
