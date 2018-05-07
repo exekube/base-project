@@ -37,8 +37,7 @@ modules/
 ├── gke-cluster
 │   └── main.tf
 ├── gke-network
-│   ├── main.tf
-│   └── variables.tf
+│   └── main.tf
 └── helm-initializer
     └── main.tf
 ```
