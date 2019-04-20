@@ -1,2 +1,3 @@
 .config/
 .hide/
+.terragrunt-cache/

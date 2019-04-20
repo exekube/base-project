@@ -29,13 +29,15 @@ The project has a companion tutorial at https://docs.exekube.com/in-practice/get
 
 > Note: Complex, production-grade cloud projects can have tens of project modules deployed into 5+ (dev, stg, prod, test, etc.) environments
 
-The base-project has only 4 *project modules*:
+The base-project has only 5 *project modules*:
 
 ```sh
 modules/
 ├── administration-tasks
 │   ├── main.tf
 │   └── values.yaml
+├── gcp-api-mgmt
+│   └── main.tf
 ├── gke-cluster
 │   └── main.tf
 ├── gke-network
@@ -50,6 +52,8 @@ deployed into 1 environment (dev):
 live/
 ├── dev
 │   ├── infra
+│   │   ├── api-mgmt
+│   │   │   └── terraform.tfvars
 │   │   └── network
 │   │       └── terraform.tfvars
 │   ├── k8s
@@ -68,6 +72,7 @@ live/
 │           │   ├── helm.key.pem.example
 │           │   ├── tiller.cert.pem.example
 │           │   └── tiller.key.pem.example
+│           ├── owner.json
 │           └── owner.json.example
 └── terraform.tfvars
 ```

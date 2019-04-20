@@ -2,7 +2,7 @@ version: "3"
 
 services:
   xk:
-    image: exekube/exekube:0.3.0-google
+    image: exekube/exekube:0.5.0-google
     working_dir: /project
     environment:
       USER: root
@@ -16,7 +16,7 @@ services:
       # TF_VAR_project_id is used to create a GCP project for our environment
       #   via the gcp-project-init script
       # It's then used by modules as a space to create resources in
-      TF_VAR_project_id: ${ENV}-demo-apps-296e23
+      TF_VAR_project_id: exekube-dev-20419
 
       # TF_VAR_serviceaccount_key will be used by the gcp-project-init script
       #    to put the service account key upon the creation of the GCP project

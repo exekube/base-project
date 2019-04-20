@@ -10,11 +10,16 @@ module "gke_cluster" {
   project_id         = "${var.project_id}"
   serviceaccount_key = "${var.serviceaccount_key}"
 
-  initial_node_count = 3
+  initial_node_count = 2
   node_type          = "g1-small"
-  kubernetes_version = "1.9.6-gke.1"
+  kubernetes_version = "1.12.7-gke.7"
 
-  main_compute_zone = "europe-west1-d"
+  master_auth_username = ""
+  master_auth_password = ""
+
+  issue_client_certificate = false
+
+  main_compute_zone = "europe-north1-a"
   additional_zones  = []
 
   oauth_scopes = [
